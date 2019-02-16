@@ -142,12 +142,14 @@ namespace Assets.Scripts.Utilities
             {
                 this.originalColor = new Color(fadeInColor.r, fadeInColor.g, fadeInColor.b, 0);
                 this.targetColor = fadeInColor;
+                this.currentColor = this.originalColor;
             }
             else if (currentState == TransitionState.FadeOut)
             {
                 this.originalColor = fadeInColor;
                 this.targetColor = new Color(fadeInColor.r, fadeInColor.g, fadeInColor.b, 0);
                 lastFadeInColor = fadeInColor;
+                this.currentColor = this.originalColor;
             }
 
             setTransitionColor(fadeInColor);
