@@ -131,6 +131,14 @@ namespace Assets.Scripts.Utilities
             setTransitionColor(fadeInColor);
         }
 
+        /// <summary>
+        /// Starts a new scene transition while allowing for code to be ran when that transition finishes.
+        /// </summary>
+        /// <param name="seconds"></param>
+        /// <param name="sceneToLoad"></param>
+        /// <param name="fadeInColor"></param>
+        /// <param name="State"></param>
+        /// <param name="OnTransitionFinish"></param>
         public void startNewSceneTransition(float seconds, string sceneToLoad, Color fadeInColor, TransitionState State, VoidDelegate OnTransitionFinish)
         {
             timer = new Timers.DeltaTimer((decimal)seconds, Enums.TimerType.CountDown, false, OnTransitionFinish);
