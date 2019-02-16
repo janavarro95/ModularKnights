@@ -261,5 +261,70 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4955361058653091827, guid: dbbb6d562f6352d4aa8d8266a61e556c,
+        type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 6b01f2f2784d6ac43abdae8d4c2e94f4,
+        type: 3}
+    - target: {fileID: 4955361058653091827, guid: dbbb6d562f6352d4aa8d8266a61e556c,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 4955361058653091827, guid: dbbb6d562f6352d4aa8d8266a61e556c,
+        type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4955361058653091827, guid: dbbb6d562f6352d4aa8d8266a61e556c,
+        type: 3}
+      propertyPath: m_FontData.m_BestFit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7607639747320183605, guid: dbbb6d562f6352d4aa8d8266a61e556c,
+        type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 6b01f2f2784d6ac43abdae8d4c2e94f4,
+        type: 3}
+    - target: {fileID: 4662402446148882548, guid: dbbb6d562f6352d4aa8d8266a61e556c,
+        type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 6b01f2f2784d6ac43abdae8d4c2e94f4,
+        type: 3}
+    - target: {fileID: 4662402446148882548, guid: dbbb6d562f6352d4aa8d8266a61e556c,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 4662402446148882548, guid: dbbb6d562f6352d4aa8d8266a61e556c,
+        type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8895367437559743527, guid: dbbb6d562f6352d4aa8d8266a61e556c,
+        type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 6b01f2f2784d6ac43abdae8d4c2e94f4,
+        type: 3}
+    - target: {fileID: 2705806508234517818, guid: dbbb6d562f6352d4aa8d8266a61e556c,
+        type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 6b01f2f2784d6ac43abdae8d4c2e94f4,
+        type: 3}
+    - target: {fileID: 2705806508234517818, guid: dbbb6d562f6352d4aa8d8266a61e556c,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2705806508234517818, guid: dbbb6d562f6352d4aa8d8266a61e556c,
+        type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dbbb6d562f6352d4aa8d8266a61e556c, type: 3}
