@@ -57,7 +57,10 @@ namespace Assets.Scripts.GameInformation
         /// <param name="arg1"></param>
         private void OnSceneLoaded(Scene scene, LoadSceneMode arg1)
         {
-
+            if (scene.name == "SplashIntroScene")
+            {
+                SceneManager.LoadScene("MainMenu");
+            }
         }
 
         // Update is called once per frame
