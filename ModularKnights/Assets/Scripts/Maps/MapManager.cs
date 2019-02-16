@@ -13,17 +13,39 @@ namespace Assets.Scripts.Maps
 
         public Map currentMap;
 
+
+        MapGrid grid;
+        SpriteRenderer gridRenderer;
+
+        [SerializeField]
+        bool showGrid = true;
+
+        public void Awake()
+        {
+            loadMap(new Map(16, 16));
+        }
+
         public void Start()
         {
+           
             Instance = this;
+
+            
+
         }
 
         public void loadMap(Map m)
         {
             this.currentMap = m;
-            SpriteRenderer r;
-
+            grid = new MapGrid();
+            grid.initialize(m, 16);
+            //StartCoroutine(grid.initialize(m,16));
+            gridRenderer = this.gameObject.transform.Find("GridRenderer").GetComponent<SpriteRenderer>();
+            gridRenderer.sprite = grid.sprite;
+            if (grid.sprite == null) Debug.Log("SPRITE IS NULL");
         }
+
+
 
 
 

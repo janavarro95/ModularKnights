@@ -10,6 +10,23 @@ namespace Assets.Scripts.Maps
     [Serializable]
     public class Map
     {
+        private int _width;
+        private int _height;
+
+        public int Width
+        {
+            get
+            {
+                return _width;
+            }
+        }
+        public int Height
+        {
+            get
+            {
+                return _height;
+            }
+        }
 
         public Dictionary<string, TileLayer> tileLayers;
 
@@ -17,15 +34,16 @@ namespace Assets.Scripts.Maps
         {
 
             this.tileLayers = new Dictionary<string, TileLayer>();
-            this.tileLayers.Add("Floor", new TileLayer(10, 10));
-            this.tileLayers.Add("Objects", new TileLayer(10, 10));
-            this.tileLayers.Add("Characters", new TileLayer(10, 10));
-            this.tileLayers.Add("Overlay", new TileLayer(10, 10));
+            _height = 10;
+            _width = 10;
 
         }
 
         public Map(int Width, int Height)
         {
+            _height = Height;
+            _width = Width;
+
             this.tileLayers = new Dictionary<string, TileLayer>();
             this.tileLayers.Add("Floor", new TileLayer(Width, Height));
             this.tileLayers.Add("Objects", new TileLayer(Width, Height));

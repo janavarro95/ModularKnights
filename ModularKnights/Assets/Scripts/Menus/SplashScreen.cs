@@ -22,7 +22,7 @@ namespace Assets.Scripts.Menus
         {
             GameObject canvas = this.gameObject.transform.Find("Canvas").gameObject;
             Image background = canvas.transform.Find("Image").gameObject.GetComponent<Image>();
-            background.rectTransform.sizeDelta = new Vector2(Camera.main.pixelRect.width, Camera.main.pixelRect.height);
+                background.rectTransform.sizeDelta = new Vector2(Camera.main.pixelRect.width, Camera.main.pixelRect.height);
 
             background.sprite = ContentManager.Instance.loadSprite(Path.Combine("ContentPacks", "BaseGame", "Graphics", "Menus", "SplashScreen", "ACoolFlowerThing.png"));
 
