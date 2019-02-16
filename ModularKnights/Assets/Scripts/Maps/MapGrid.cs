@@ -61,6 +61,7 @@ namespace Assets.Scripts.Maps
         public void initialize(Map m, int dimensionalMultiplier)
         {
             this.texture = new Texture2D(m.Width * dimensionalMultiplier, m.Height * dimensionalMultiplier);
+            cleanTexture();
             _gridColor = Color.black;
             _cellDimension = dimensionalMultiplier;
             stitchGrid(Color.black);
@@ -70,10 +71,26 @@ namespace Assets.Scripts.Maps
         public void initialize(Map m, int dimensionalMultiplier,Color c)
         {
             this.texture = new Texture2D(m.Width * dimensionalMultiplier, m.Height * dimensionalMultiplier);
+            cleanTexture();
             _gridColor = c;
             _cellDimension = dimensionalMultiplier;
             stitchGrid(Color.black);
             loadSprite();
+        }
+
+        /// <summary>
+        /// Cleans the texture by setting the alpha of all pixels to 0.
+        /// </summary>
+        private void cleanTexture()
+        {
+            for (int i = 0; i < this.texture.width; i += 1)
+            {
+                for (int j = 0; j < this.texture.height; j += 1)
+                {
+                    this.texture.SetPixel(i, j, new Color(0, 0, 0, 0));
+                    //Debug.Log("CLEAN: " + new Vector2(i, j));
+                }
+            }
         }
 
         /// <summary>
