@@ -43,7 +43,7 @@ namespace Assets.Scripts.Menus
             creditsButton = new MenuComponent(canvas.transform.Find("CreditsButton").gameObject.GetComponent<Button>());
             saveLoadButton =new MenuComponent(canvas.transform.Find("SaveLoadButton").gameObject.GetComponent<Button>());
 
-            menuCursor = canvas.transform.Find("MenuMouseCursor").GetComponent<GameCursor>();
+            menuCursor = GameCursor.Instance;
             Menu.ActiveMenu = this;
 
             setUpForSnapping();

@@ -52,6 +52,7 @@ namespace Assets.Scripts.GameInput
 
         private void Awake()
         {
+            GameCursor.Instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
 
@@ -61,7 +62,6 @@ namespace Assets.Scripts.GameInput
             visibilityTimer = new Utilities.Timers.DeltaTimer(5, Enums.TimerType.CountDown, false,new Utilities.Delegates.VoidDelegate(makeInvisible));
             visibilityTimer.start();
             rect = this.gameObject.GetComponent<RectTransform>();
-            GameCursor.Instance = this;
             snapTimer = new DeltaTimer((decimal)snapDelay, Enums.TimerType.CountDown, false, null);
             snapTimer.start();
 
@@ -95,7 +95,7 @@ namespace Assets.Scripts.GameInput
         /// </summary>
         private void checkForSnappyMovement()
         {
-            if (GameInput.InputControls.GetControllerType() == InputControls.ControllerType.Keyboard) return;
+            //if (GameInput.InputControls.GetControllerType() == InputControls.ControllerType.Keyboard) return;
 
             Vector3 delta = new Vector3(InputControls.LeftJoystickHorizontal, InputControls.LeftJoystickVertical, 0) * mouseMovementSpeed;
             if (canSnapToNextSpot)
