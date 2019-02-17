@@ -66,6 +66,15 @@ namespace Assets.Scripts.GameInput
             }
         }
 
+        private bool _justMoved;
+        public bool JustMoved
+        {
+            get
+            {
+                return _justMoved;
+            }
+        }
+
         private void Awake()
         {
             GameCursor.Instance = this;
@@ -129,6 +138,8 @@ namespace Assets.Scripts.GameInput
                         visibilityTimer.restart();
                         isVisible = true;
                         snapTimer.restart();
+                        _justMoved = true;
+                        return;
                     }
                     else if (delta.x > snapSensitivity)
                     {
@@ -137,9 +148,11 @@ namespace Assets.Scripts.GameInput
                         visibilityTimer.restart();
                         isVisible = true;
                         snapTimer.restart();
+                        _justMoved = true;
+                        return;
                     }
                 }
-                else
+                else if(Mathf.Abs(delta.x) > Mathf.Abs(delta.y))
                 {
                     if (delta.y < -snapSensitivity)
                     {
@@ -148,6 +161,8 @@ namespace Assets.Scripts.GameInput
                         visibilityTimer.restart();
                         isVisible = true;
                         snapTimer.restart();
+                        _justMoved = true;
+                        return;
                     }
                     else if (delta.y > snapSensitivity)
                     {
@@ -156,7 +171,13 @@ namespace Assets.Scripts.GameInput
                         visibilityTimer.restart();
                         isVisible = true;
                         snapTimer.restart();
+                        _justMoved = true;
+                        return;
                     }
+                }
+                else
+                {
+                    _justMoved = false;
                 }
             }
         }
@@ -171,19 +192,29 @@ namespace Assets.Scripts.GameInput
             {
                 Vector3 delta = new Vector3(GameInput.InputControls.RightJoystickHorizontal, GameInput.InputControls.RightJoystickVertical, 0) * mouseMovementSpeed;
                 this.rect.position += delta;
-                if (delta.x == 0 && delta.y == 0) return;
+                if (delta.x == 0 && delta.y == 0)
+                {
+                    _justMoved = false;
+                    return;
+                }
                 if (Mathf.Abs(delta.x) > 0 || Mathf.Abs(delta.y) > 0) visibilityTimer.restart();
                 movedByCursor = false;
                 isVisible = true;
+                _justMoved = true;
             }
             else
             {
-                if (Mathf.Abs(vec.x - oldMousePos.x) < .001 && Mathf.Abs(vec.y - oldMousePos.y) < .001) return; //stop random mouse sliding.
+                if (Mathf.Abs(vec.x - oldMousePos.x) < .001 && Mathf.Abs(vec.y - oldMousePos.y) < .001)
+                {
+                    _justMoved = false;
+                    return; //stop random mouse sliding.
+                }
                 oldMousePos = vec;
                 this.rect.position = vec;
                 movedByCursor = true;
                 visibilityTimer.restart();
                 isVisible = true;
+                _justMoved = true;
             }
         }
 

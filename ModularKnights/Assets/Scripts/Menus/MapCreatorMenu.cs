@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.GameInput;
 using Assets.Scripts.Maps;
+using Assets.Scripts.Menus.Components;
 using SFB;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Menus
@@ -30,6 +32,8 @@ namespace Assets.Scripts.Menus
         GameObject newMapState;
         Button createMapButton;
         Button createBackToPrompt;
+        InputFieldComponent inputWidth;
+        InputFieldComponent inputHeight;
 
         private enum MenuMode
         {
@@ -53,7 +57,8 @@ namespace Assets.Scripts.Menus
             newMapState = canvas.transform.Find("NewMapCreationPrompt").gameObject;
             createMapButton = newMapState.transform.Find("Create").gameObject.GetComponent<Button>();
             createBackToPrompt = newMapState.transform.Find("Back").gameObject.GetComponent<Button>();
-
+            inputWidth =new InputFieldComponent(newMapState.transform.Find("InputWidth").gameObject.GetComponent<InputField>());
+            inputHeight =new InputFieldComponent(newMapState.transform.Find("InputHeight").gameObject.GetComponent<InputField>());
 
             this.menuCursor = GameCursor.Instance;
             menuMode = MenuMode.NewLoadSelect;
@@ -113,8 +118,35 @@ namespace Assets.Scripts.Menus
                     setUpMenuVisibility();
                     return;
                 }
+                if (GameCursor.SimulateMousePress(inputWidth))
+                {
+                    inputWidth.Select();
+                    return;
+                }
+                if (GameCursor.SimulateMousePress(inputHeight))
+                {
+                    inputHeight.Select();
+                    return;
+                }
             }
 
+            checkForDisablingEventSystem();
+        }
+
+        private void checkForDisablingEventSystem()
+        {
+
+
+            if (EventSystem.current.currentSelectedGameObject != null && (InputControls.LeftJoystickMoved == true) && this.snapCompatible() == false)
+            {
+                if (InputControls.GetControllerType() == InputControls.ControllerType.Keyboard)
+                {
+                    Debug.Log("Am I keyboard???");
+                    return;
+                }
+                Debug.Log("DESELECT");
+                EventSystem.current.SetSelectedGameObject(null, new BaseEventData(EventSystem.current));
+            }
         }
 
         private void createNewMapPromptButtonClick()

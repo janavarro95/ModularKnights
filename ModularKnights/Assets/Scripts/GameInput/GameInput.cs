@@ -467,6 +467,44 @@ namespace Assets.Scripts.GameInput
                 return Input.GetAxis("Vertical");
             }
         }
+
+        public static Vector2 LeftJoystickDelta
+        {
+            get
+            {
+                return new Vector2(LeftJoystickHorizontal, LeftJoystickVertical);
+            }
+        }
+
+        public static bool LeftJoystickMoved
+        {
+            get
+            {
+                Vector2 delta = LeftJoystickDelta;
+                if (delta.x == 0 && delta.y == 0) return false;
+                else return true;
+            }
+        }
+
+        public static Vector2 MouseDelta
+        {
+            get
+            {
+                Vector2 delta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+                return delta;
+            }
+        }
+
+        public static bool MouseMoved
+        {
+            get
+            {
+                Vector2 delta = MouseDelta;
+                if (delta.x == 0 && delta.y == 0) return false;
+                else return true;
+            }
+        }
+
         /// <summary>
         /// Checks if L3 on the joystick has been clicked down.
         /// </summary>
