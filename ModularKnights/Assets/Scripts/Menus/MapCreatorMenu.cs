@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.GameInput;
 using Assets.Scripts.Maps;
 using Assets.Scripts.Menus.Components;
+using Assets.Scripts.Utilities.Math;
 using SFB;
 using System;
 using System.Collections.Generic;
@@ -23,8 +24,7 @@ namespace Assets.Scripts.Menus
     ///     -edit layers
     ///     -save map
     ///     -load map
-    /// -make controls to move camera (wasd)
-    ///     -ensure it can't scroll too far from the map grid.
+    ///     
     /// </summary>
     public class MapCreatorMenu:Menu
     {
@@ -49,6 +49,8 @@ namespace Assets.Scripts.Menus
         InputFieldComponent inputHeight;
 
         GameObject mapEditor;
+
+        public float cameraScrollSpeedModifier=10f;
 
         private enum MenuMode
         {
@@ -177,7 +179,39 @@ namespace Assets.Scripts.Menus
                 }
             }
 
+            if(menuMode == MenuMode.MapEditor)
+            {
+                if (cursorClickIntersectsUI()==false)
+                {
+                    if (InputControls.APressed)
+                    {
+                        Debug.Log("AAAHHH???");
+                        Debug.Log(GameCursor.Instance.WorldPosition);
+                    }
+                }
+                checkForCameraMovement();
+
+            }
+
             checkForDisablingEventSystem();
+        }
+
+        private void checkForCameraMovement()
+        {
+            if (InputControls.LeftJoystickMoved)
+            {
+                if (Camera.main.transform.position.x >= 0 && Camera.main.transform.position.x <= currentMap.Width) Camera.main.transform.position += new Vector3(InputControls.LeftJoystickHorizontal, 0, 0)*Time.deltaTime*cameraScrollSpeedModifier;
+                if (Camera.main.transform.position.y >= 0 && Camera.main.transform.position.y <= currentMap.Height) Camera.main.transform.position += new Vector3(0, InputControls.LeftJoystickVertical, 0)*Time.deltaTime*cameraScrollSpeedModifier;
+                Vector3 pos = Camera.main.transform.position;
+                pos.x = pos.x.Clamp(0, currentMap.Width);
+                pos.y = pos.y.Clamp(0, currentMap.Height);
+                Camera.main.transform.position = pos;
+            }
+        }
+
+        private bool cursorClickIntersectsUI()
+        {
+            return false;
         }
 
         private void checkForDisablingEventSystem()
