@@ -307,6 +307,13 @@ namespace Assets.Scripts.GameInput
         {
             isVisible = false;
         }
+
+        public Vector3 getTilePosition()
+        {
+            Vector3 worldPos = WorldPosition;
+            return new Vector3((int)worldPos.x, (int)worldPos.y, (int)worldPos.z);
+        }
+
         #region
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
         //              Static Methods                //

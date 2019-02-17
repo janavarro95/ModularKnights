@@ -185,7 +185,6 @@ namespace Assets.Scripts.Menus
                 {
                     if (InputControls.APressed)
                     {
-                        Debug.Log("AAAHHH???");
                         Debug.Log(GameCursor.Instance.WorldPosition);
                     }
                 }
