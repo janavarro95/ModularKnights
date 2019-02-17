@@ -13,6 +13,19 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.Menus
 {
+
+    /// <summary>
+    /// Todo:
+    /// make ui for editor mode
+    ///     -go back
+    ///     -paint tiles
+    ///     -delete tiles
+    ///     -edit layers
+    ///     -save map
+    ///     -load map
+    /// -make controls to move camera (wasd)
+    ///     -ensure it can't scroll too far from the map grid.
+    /// </summary>
     public class MapCreatorMenu:Menu
     {
 
@@ -34,6 +47,8 @@ namespace Assets.Scripts.Menus
         Button createBackToPrompt;
         InputFieldComponent inputWidth;
         InputFieldComponent inputHeight;
+
+        GameObject mapEditor;
 
         private enum MenuMode
         {
@@ -60,6 +75,9 @@ namespace Assets.Scripts.Menus
             inputWidth =new InputFieldComponent(newMapState.transform.Find("InputWidth").gameObject.GetComponent<InputField>());
             inputHeight =new InputFieldComponent(newMapState.transform.Find("InputHeight").gameObject.GetComponent<InputField>());
 
+
+            mapEditor = this.gameObject.transform.Find("MapEditor").gameObject;
+
             this.menuCursor = GameCursor.Instance;
             menuMode = MenuMode.NewLoadSelect;
 
@@ -73,11 +91,19 @@ namespace Assets.Scripts.Menus
             {
                 newLoadState.SetActive(true);
                 newMapState.SetActive(false);
+                mapEditor.SetActive(false);
             }
             if(menuMode == MenuMode.NewMapCreationPrompt)
             {
                 newLoadState.SetActive(false);
                 newMapState.SetActive(true);
+                mapEditor.SetActive(false);
+            }
+            if(menuMode== MenuMode.MapEditor)
+            {
+                newLoadState.SetActive(false);
+                newMapState.SetActive(false);
+                mapEditor.SetActive(true);
             }
         }
 
@@ -109,7 +135,28 @@ namespace Assets.Scripts.Menus
             {
                 if (GameCursor.SimulateMousePress(createMapButton))
                 {
+                    if (String.IsNullOrEmpty(inputWidth.value))
+                    {
+                        throw new Exception("Input width field is empty!");
+                    }
+                    if (String.IsNullOrEmpty(inputHeight.value))
+                    {
+                        throw new Exception("Input width field is empty!");
+                    }
+
+                    if (Convert.ToInt32(inputWidth.value) <= 0)
+                    {
+                        throw new Exception("Input width must be a positive number greater than 0!");
+                    }
+                    if (Convert.ToInt32(inputHeight.value) <= 0)
+                    {
+                        throw new Exception("Input height must be a positive number greater than 0!");
+                    }
+
                     Debug.Log("CREATE THE MAP");
+                    createMap();
+                    menuMode = MenuMode.MapEditor;
+                    setUpMenuVisibility();
                     return;
                 }
                 if (GameCursor.SimulateMousePress(createBackToPrompt))
@@ -164,6 +211,25 @@ namespace Assets.Scripts.Menus
             var paths = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions, true);
             if (paths.Length == 0) return;
             Debug.Log(paths[0]);
+        }
+
+        private void createMap()
+        {
+            Map m = new Map(Convert.ToInt32(this.inputWidth.value),Convert.ToInt32(this.inputHeight.value));
+            this.currentMap = m;
+
+            grid = new MapGrid();
+            grid.initialize(m, 16);
+            //StartCoroutine(grid.initialize(m,16));
+
+
+
+            gridRenderer = mapEditor.transform.Find("GridRenderer").GetComponent<SpriteRenderer>();
+            gridRenderer.sprite = grid.sprite;
+            if (grid.sprite == null) Debug.Log("SPRITE IS NULL");
+            //centerCameraOnMap();
+            this.currentMap.centerCameraOnMap();
+
         }
 
         public override void exitMenu()

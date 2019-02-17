@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Scripts.Maps
 {
@@ -64,6 +65,11 @@ namespace Assets.Scripts.Maps
         public virtual bool isBattleMap()
         {
             return false;
+        }
+
+        public void centerCameraOnMap()
+        {
+            Camera.main.transform.position = new Vector3(this.Width / 2, this.Height / 2, -10);
         }
 
 
