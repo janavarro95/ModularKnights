@@ -151,7 +151,7 @@ namespace Assets.Scripts.Maps
 
         private void loadSprite()
         {
-            loadSprite(new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 16f);
+            loadSprite(new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0), 16f);
         }
 
 

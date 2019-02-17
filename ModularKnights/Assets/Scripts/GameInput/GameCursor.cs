@@ -37,6 +37,22 @@ namespace Assets.Scripts.GameInput
 
         public bool isVisible;
 
+        public Vector3 CanvasPosition
+        {
+            get
+            {
+                return this.gameObject.transform.position;
+            }
+        }
+
+        public Vector3 WorldPosition
+        {
+            get
+            {
+                return Camera.main.ScreenToWorldPoint(this.gameObject.transform.position);
+            }
+        }
+
         bool canSnapToNextSpot
         {
             get
@@ -87,6 +103,10 @@ namespace Assets.Scripts.GameInput
                 {
                     checkForNonSnapMovement();
                 }
+            }
+            else
+            {
+                checkForNonSnapMovement();
             }
         }
 
