@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Menus.Components
@@ -17,12 +18,27 @@ namespace Assets.Scripts.Menus.Components
 
         public MonoBehaviour unityObject;
 
+        public bool Selected
+        {
+            get
+            {
+                if(EventSystem.current != null)
+                {
+                    if (EventSystem.current.currentSelectedGameObject == unityObject.gameObject)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
         public MenuComponent(MonoBehaviour UnityObject)
         {
             this.unityObject = UnityObject;
         }
 
-        public void setNeighbors(MenuComponent Left=null, MenuComponent Right=null, MenuComponent Top=null, MenuComponent Bottom = null)
+        public virtual void setNeighbors(MenuComponent Left=null, MenuComponent Right=null, MenuComponent Top=null, MenuComponent Bottom = null)
         {
             leftNeighbor = Left;
             rightNeighbor = Right;
@@ -46,7 +62,7 @@ namespace Assets.Scripts.Menus.Components
         /// </summary>
         /// <param name="NextDirection"></param>
         /// <returns></returns>
-        public MenuComponent snapToNextComponent(Enums.FacingDirection NextDirection)
+        public virtual MenuComponent snapToNextComponent(Enums.FacingDirection NextDirection)
         {
             if (Menu.ActiveMenu.menuCursor != null)
             {
@@ -78,6 +94,11 @@ namespace Assets.Scripts.Menus.Components
                 return Menu.ActiveMenu.selectedComponent;
             }
             return null; //No snapping here!
+        }
+
+        public virtual void select()
+        {
+
         }
 
     }

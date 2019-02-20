@@ -539,23 +539,28 @@ namespace Assets.Scripts.GameInput
         /// <returns></returns>
         public static ControllerType GetControllerType()
         {
+            Debug.Log(Input.GetJoystickNames()[0].ToLower());
+
+            
             if (Input.GetJoystickNames().Length == 0) return ControllerType.Keyboard;
             try
             {
-                if (Input.GetJoystickNames().ElementAt(0).Contains("DualShock".ToLower()))
+                if (Input.GetJoystickNames().ElementAt(0).Contains("DualShock"))
                 {
                     return ControllerType.DualShock;
                 }
-                else if (Input.GetJoystickNames().ElementAt(0).Contains("XBox 360".ToLower()))
+                else if (Input.GetJoystickNames()[0].Contains("XBOX 360"))
                 {
+                    Debug.Log("I AM XBOX");
                     return ControllerType.XBox360;
                 }
-                else if (Input.GetJoystickNames().ElementAt(0).Contains("XBox One".ToLower()))
+                else if (Input.GetJoystickNames().ElementAt(0).Contains("XBOX One"))
                 {
                     throw new Exception("Xbox One controllers not supported yet. Please contact Josh!");
                 }
                 else
                 {
+                    Debug.Log("KEYBOARD???");
                     return ControllerType.Keyboard;
                 }
             }

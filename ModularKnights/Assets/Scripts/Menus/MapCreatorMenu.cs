@@ -18,12 +18,12 @@ namespace Assets.Scripts.Menus
     /// <summary>
     /// Todo:
     /// make ui for editor mode
-    ///     -go back
     ///     -paint tiles
     ///     -delete tiles
     ///     -edit layers
-    ///     -save map
-    ///     -load map
+    ///     
+    ///     -undo
+    ///     -redo
     ///     
     /// </summary>
     public class MapCreatorMenu:Menu
@@ -48,15 +48,24 @@ namespace Assets.Scripts.Menus
         InputFieldComponent inputWidth;
         InputFieldComponent inputHeight;
 
+        GameObject mapEditorUI;
+        DropDownComponent layerSelectionComponent;
+        Button selectTileButton;
+        Button saveButton;
+        Button loadButton;
+        Button goBackButton;
+
         GameObject mapEditor;
 
         public float cameraScrollSpeedModifier=10f;
+
+        public bool editsHaveBeenMade;
 
         private enum MenuMode
         {
             NewLoadSelect,
             NewMapCreationPrompt,
-            MapEditor
+            MapEditorUI,
         }
 
         private MenuMode menuMode;
@@ -77,6 +86,13 @@ namespace Assets.Scripts.Menus
             inputWidth =new InputFieldComponent(newMapState.transform.Find("InputWidth").gameObject.GetComponent<InputField>());
             inputHeight =new InputFieldComponent(newMapState.transform.Find("InputHeight").gameObject.GetComponent<InputField>());
 
+            mapEditorUI = canvas.transform.Find("MapEditorUI").gameObject;
+            layerSelectionComponent =new DropDownComponent(mapEditorUI.transform.Find("LayerSelect").gameObject.GetComponent<Dropdown>());
+            selectTileButton = mapEditorUI.transform.Find("SelectTileButton").gameObject.GetComponent<Button>();
+            saveButton = mapEditorUI.transform.Find("SaveMap").gameObject.GetComponent<Button>();
+            loadMapButton= mapEditorUI.transform.Find("LoadMap").gameObject.GetComponent<Button>();
+            goBackButton= mapEditorUI.transform.Find("GoBack").gameObject.GetComponent<Button>();
+
 
             mapEditor = this.gameObject.transform.Find("MapEditor").gameObject;
 
@@ -93,18 +109,21 @@ namespace Assets.Scripts.Menus
             {
                 newLoadState.SetActive(true);
                 newMapState.SetActive(false);
+                mapEditorUI.SetActive(false);
                 mapEditor.SetActive(false);
             }
             if(menuMode == MenuMode.NewMapCreationPrompt)
             {
                 newLoadState.SetActive(false);
                 newMapState.SetActive(true);
+                mapEditorUI.SetActive(false);
                 mapEditor.SetActive(false);
             }
-            if(menuMode== MenuMode.MapEditor)
+            if(menuMode== MenuMode.MapEditorUI)
             {
                 newLoadState.SetActive(false);
                 newMapState.SetActive(false);
+                mapEditorUI.SetActive(true);
                 mapEditor.SetActive(true);
             }
         }
@@ -121,6 +140,14 @@ namespace Assets.Scripts.Menus
 
         public override void Update()
         {
+
+            checkForInput();
+
+            checkForDisablingEventSystem();
+        }
+
+        private void checkForInput()
+        {
             if (menuMode == MenuMode.NewLoadSelect)
             {
 
@@ -133,7 +160,7 @@ namespace Assets.Scripts.Menus
                     loadMap();
                 }
             }
-            if(menuMode == MenuMode.NewMapCreationPrompt)
+            if (menuMode == MenuMode.NewMapCreationPrompt)
             {
                 if (GameCursor.SimulateMousePress(createMapButton))
                 {
@@ -157,7 +184,7 @@ namespace Assets.Scripts.Menus
 
                     Debug.Log("CREATE THE MAP");
                     createMap();
-                    menuMode = MenuMode.MapEditor;
+                    menuMode = MenuMode.MapEditorUI;
                     setUpMenuVisibility();
                     return;
                 }
@@ -169,19 +196,19 @@ namespace Assets.Scripts.Menus
                 }
                 if (GameCursor.SimulateMousePress(inputWidth))
                 {
-                    inputWidth.Select();
+                    inputWidth.select();
                     return;
                 }
                 if (GameCursor.SimulateMousePress(inputHeight))
                 {
-                    inputHeight.Select();
+                    inputHeight.select();
                     return;
                 }
             }
 
-            if(menuMode == MenuMode.MapEditor)
+            if (menuMode == MenuMode.MapEditorUI)
             {
-                if (cursorClickIntersectsUI()==false)
+                if (cursorClickIntersectsUI() == false)
                 {
                     if (InputControls.APressed)
                     {
@@ -191,10 +218,12 @@ namespace Assets.Scripts.Menus
                 checkForCameraMovement();
 
             }
-
-            checkForDisablingEventSystem();
         }
 
+
+        /// <summary>
+        /// Checks for moving the camera around the grid in a freeform roaming fasion fashion.
+        /// </summary>
         private void checkForCameraMovement()
         {
             if (InputControls.LeftJoystickMoved)
@@ -208,11 +237,55 @@ namespace Assets.Scripts.Menus
             }
         }
 
+        /// <summary>
+        /// Checks if the UI has been clicked to intersect the map from being clicked.
+        /// </summary>
+        /// <returns></returns>
         private bool cursorClickIntersectsUI()
         {
+            if(GameCursor.SimulateMousePress(layerSelectionComponent)){
+                layerSelectionComponent.select();
+                return true;
+            }
+            if (GameCursor.SimulateMousePress(selectTileButton))
+            {
+                Debug.Log("Select a tile!");
+                return true;
+            }
+            if (GameCursor.SimulateMousePress(saveButton))
+            {
+                Debug.Log("Save map!");
+                return true;
+            }
+            if (GameCursor.SimulateMousePress(loadMapButton))
+            {
+                if (editsHaveBeenMade)
+                {
+                    Debug.Log("Trying to load a map but edits have been made! Do something about it!");
+                    return true;
+                }
+                loadMap();
+                return true;
+            }
+            if (GameCursor.SimulateMousePress(goBackButton))
+            {
+                if (editsHaveBeenMade)
+                {
+                    Debug.Log("Trying to exit map editor but edits have been made! Do something about it!");
+                    return true;
+                }
+                menuMode = MenuMode.NewLoadSelect;
+                setUpMenuVisibility();
+                return true;
+            }
+
+
             return false;
         }
 
+        /// <summary>
+        /// Used to prevent Unity's event system happening at the same time my system is working. I.E selecting components when I don't want it to.
+        /// </summary>
         private void checkForDisablingEventSystem()
         {
 
@@ -221,20 +294,24 @@ namespace Assets.Scripts.Menus
             {
                 if (InputControls.GetControllerType() == InputControls.ControllerType.Keyboard)
                 {
-                    Debug.Log("Am I keyboard???");
                     return;
                 }
-                Debug.Log("DESELECT");
-                EventSystem.current.SetSelectedGameObject(null, new BaseEventData(EventSystem.current));
+                EventSystem.current.SetSelectedGameObject(null);
             }
         }
 
+        /// <summary>
+        /// Open the prompt for creating a new map.
+        /// </summary>
         private void createNewMapPromptButtonClick()
         {
             menuMode = MenuMode.NewMapCreationPrompt;
             setUpMenuVisibility();
         }
 
+        /// <summary>
+        /// Load a map from disk.
+        /// </summary>
         private void loadMap()
         {
             var extensions = new[] {
@@ -246,6 +323,9 @@ namespace Assets.Scripts.Menus
             Debug.Log(paths[0]);
         }
 
+        /// <summary>
+        /// Create a new map and show all of the components on the screen.
+        /// </summary>
         private void createMap()
         {
             Map m = new Map(Convert.ToInt32(this.inputWidth.value),Convert.ToInt32(this.inputHeight.value));
@@ -255,7 +335,13 @@ namespace Assets.Scripts.Menus
             grid.initialize(m, 16);
             //StartCoroutine(grid.initialize(m,16));
 
-
+            this.layerSelectionComponent.clearOptions();
+            List<string> options = new List<string>();
+            foreach (var layer in m.tileLayers.Keys)
+            {
+                options.Add(layer);   
+            }
+            this.layerSelectionComponent.addOptions(options);
 
             gridRenderer = mapEditor.transform.Find("GridRenderer").GetComponent<SpriteRenderer>();
             gridRenderer.sprite = grid.sprite;

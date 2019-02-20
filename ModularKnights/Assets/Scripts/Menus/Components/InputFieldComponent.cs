@@ -28,7 +28,7 @@ namespace Assets.Scripts.Menus.Components
 
         }
 
-        public void Select()
+        public override void select()
         {
             (this.unityObject as InputField).Select();
         }
