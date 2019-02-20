@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,6 +28,9 @@ namespace Assets.Scripts.Utilities.Serialization
                 this.serializer.NullValueHandling = NullValueHandling.Include;
 
                 this.settings = new JsonSerializerSettings();
+
+                this.addConverter(new StringEnumConverter(true));
+
                 foreach (JsonConverter converter in this.serializer.Converters)
                 {
                     this.settings.Converters.Add(converter);

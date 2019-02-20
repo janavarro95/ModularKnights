@@ -11,6 +11,8 @@ namespace Assets.Scripts.GameInformation
     {
 
         public static GameManager Manager;
+
+        public Serializer serializer;
         /// <summary>
         /// Initializing the game manager.
         /// </summary>
@@ -19,6 +21,7 @@ namespace Assets.Scripts.GameInformation
             Manager = this;
             DontDestroyOnLoad(this.gameObject);
             initializeGame();
+            serializer = new Serializer();
         }
 
         // Start is called before the first frame update
