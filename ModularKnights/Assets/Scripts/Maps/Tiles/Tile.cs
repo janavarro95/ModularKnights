@@ -28,14 +28,28 @@ namespace Assets.Scripts.Maps.Tiles
             Custom
         }
 
-        public string id;
+
+
+        public string tileID;
+        public string packID;
+
+        
+
+        [JsonIgnore]
+        public string ContentPackID
+        {
+            get
+            {
+                return packID;
+            }
+        }
 
         [JsonIgnore]
         public string ID
         {
             get
             {
-                return id;
+                return tileID;
             }
         }
 
@@ -45,7 +59,7 @@ namespace Assets.Scripts.Maps.Tiles
         /// <summary>
         /// The path to the texture in the streaming assets path.
         /// </summary>
-        public string pathToTexture;
+        public string textureName;
 
         [JsonIgnore]
         public string TileName
@@ -61,19 +75,39 @@ namespace Assets.Scripts.Maps.Tiles
             
         }
 
-        public Tile(TileType type,string PathToTileMeta,string TextureName)
+        public Tile(string FullPathToFileMeta)
         {
-            this.tileType = type;
-            texture = (Texture2D)ContentManager.Instance.loadTexture2D(TextureName);
+            Tile t= GameInformation.GameManager.Manager.serializer.Deserialize<Tile>(FullPathToFileMeta);
+            this.tileType = t.tileType;
+            this.packID = t.packID;
+            this.tileID = t.tileID;
+            this.customName = t.customName;
+            this.textureName = t.textureName;
+
+            texture = (Texture2D)ContentManager.Instance.loadTexture2D(Path.Combine(Path.GetDirectoryName(FullPathToFileMeta),this.textureName));
+
             initialize();
+
+
         }
 
-        public Tile(string name,string PathToTileMeta,string TextureName)
+        public Tile(TileType type,string PackID, string TileID,string customName,string textureName,string pathToImage="")
         {
-            this.tileType = TileType.Custom;
-            this.customName = name;
-            texture = (Texture2D)ContentManager.Instance.loadTexture2D(TextureName);
-            initialize();
+            this.tileType = type;
+            this.packID = PackID;
+            this.tileID = TileID;
+            this.customName = customName;
+            this.textureName = textureName;
+
+            if (String.IsNullOrEmpty(pathToImage))
+            {
+                return;
+            }
+            else
+            {
+                texture = (Texture2D)ContentManager.Instance.loadTexture2D(Path.Combine(pathToImage,textureName));
+                initialize();
+            }
         }
 
         public virtual string getTileName()
